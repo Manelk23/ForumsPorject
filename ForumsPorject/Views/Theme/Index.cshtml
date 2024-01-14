@@ -1,0 +1,168 @@
+﻿@{
+    ViewData["Title"] = "Themes";
+}
+
+@model IEnumerable<ThemeModel>
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="#">Forums</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Themes</li>
+    </ol>
+</nav>
+
+<style>
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+        width: 100%;
+    }
+
+    .custom-rectangle {
+        width: 80px;
+        height: auto;
+        background: #FFF;
+        padding: 16px;
+        text-align: center;
+        margin-left: auto;
+        margin-bottom: 0;
+        display: block;
+        position: fixed;
+        border-radius: 20px;
+        overflow: hidden;
+        -webkit-box-shadow: 0 3px 5px 0 rgba(0,1,1,.1);
+        box-shadow: 0 3px 5px 0 rgba(0,1,1,.1);
+    }
+
+    .rounded-image {
+        border-radius: 50%;
+        width: 50px; /* Ajustez la taille selon vos besoins */
+        height: 50px;
+        object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans le cercle */
+    }
+
+
+    .meks_ess-item {
+        text-decoration: none;
+        color: #333;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+        .meks_ess-item span {
+            display: block;
+        }
+
+
+    .box2 {
+        flex: 9;
+        border: 1px solid #ccc;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        border-radius: 30px;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    }
+
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 90%;
+        margin: 5% 0 0 3%;
+    }
+
+    .block-header {
+        padding: 15px 15px;
+        margin: 0;
+        text-decoration: none;
+		font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff ;
+        font-weight: 400;
+        width: 100%;
+        background: linear-gradient(#27a3df, #27a3df);
+    }
+
+    
+  
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3%;
+    }
+
+
+    .btn-custom {
+        background-color: #5ccb5f;
+        color: #fff; /* Couleur du texte */
+    }
+
+</style>
+<div class="text-center p-pageWrapper">
+    
+    <h1 class="display-4 block-h1">Forum sur l'Agriculture Tunisienne</h1>
+    </br>
+    </br>
+
+    <div>
+        <div class="custom-rectangle">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-linkedin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="rounded-image" data-url="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F">
+            </a>
+            <a href="https://api.whatsapp.com/send?text=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes%20https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://www.svgrepo.com/show/382712/whatsapp-whats-app.svg" alt="WhatsApp" class="rounded-image">
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://localhost:7203/" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://img.freepik.com/vecteurs-premium/logo-medias-sociaux-bleu_197792-1759.jpg?w=740" alt="Facebook" class="rounded-image">
+            </a>
+            <a href="mailto:?subject=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes&amp" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src=" https://www.iconbolt.com/iconsets/social-media-logos/email-gmail-logo-mail-social-social-media.svg" alt="Email" class="rounded-image">
+            </a>
+        </div>
+
+        <div class="box2" style="margin:auto;">
+
+            <div class="block-container">
+
+                <h2 class="block-header">Themes</h2>
+                @foreach (var th in Model)
+                {
+
+                    <table style="margin:10px; ">
+                        <tr>
+                            <td width="100%" style="text-align: left;">
+                                <a href="@Url.Action("Index", "Discussions", new { id = th.Id })">@th.Name</a>
+                            </td>
+                            <td width="15%">
+                                <a class="btn btn-custom" type="submit" asp-action="Edit" asp-route-id="@th.Id">Modifier</a>
+                            </td>
+                            <td width="15%">
+                                <a class="btn btn-warning" type="submit" asp-action="Delete" asp-controller="Theme" asp-route-id="@th.Id">Supprimer</a>
+                            </td>
+
+
+                        </tr>
+
+
+                    </table>
+                }
+
+            </div>
+            <div style="margin-top:10px;">
+                <a class="btn btn-success" asp-action="Create" asp-route-forumId="@Model.FirstOrDefault()?.Forumid">Ajouter</a>
+            </div>
+        </div>
+    </div>        
+</div>
+
+

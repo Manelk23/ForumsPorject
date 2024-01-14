@@ -1,0 +1,73 @@
+﻿@model ForumsPorject.Models.ForumModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+</nav>
+
+<style>
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3%;
+    }
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%;
+        margin: 5% 0 0 3%;
+    }
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1 class="block-h1">Créer un nouveau Forum</h1>
+
+    <div class="block-container">
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form asp-action="Create">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    </br>
+                    <div class="form-group">
+                        <label asp-for="Discription" class="control-label"></label>
+                        <input asp-for="Discription" class="form-control" />
+                        <span asp-validation-for="Discription" class="text-danger"></span>
+                    </div>
+                    </br>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-success" value="Partager" />
+                    </div>
+                    </br>
+                </form>
+            </div>
+        </div>
+        </br>
+    </div>
+</div>

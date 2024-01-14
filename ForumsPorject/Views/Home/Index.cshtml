@@ -1,0 +1,268 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+@model IEnumerable<CategoryModel>
+
+<style>
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+        width: 100%;
+    }
+
+    .auth-buttons {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 1%;
+    }
+
+        .auth-buttons form {
+            margin-left: 10px;
+        }
+
+    .p-navv {
+        font-size: 18px;
+        color: #fff;
+        background: linear-gradient(#048B9A, #048B9A);
+        margin-left: 5px;
+        border-radius: 10px;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3%;
+    }
+
+    .custom-rectangle {
+        width: 80px;
+        height: auto;
+        background: #FFF;
+        padding: 16px;
+        text-align: center;
+        margin-left: auto;
+        margin-bottom: 0;
+        display: block;
+        position: fixed;
+        border-radius: 20px;
+        overflow: hidden;
+        -webkit-box-shadow: 0 3px 5px 0 rgba(0, 1, 1, 0.1);
+        box-shadow: 0 3px 5px 0 rgba(0, 1, 1, 0.1);
+    }
+
+    .rounded-image {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+    }
+
+    .meks_ess-item {
+        text-decoration: none;
+        color: #333;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+        .meks_ess-item span {
+            display: block;
+        }
+
+    .box2 {
+        flex: 9;
+        border: 1px solid #ccc;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 10px;
+        width: 80%;
+        border-radius: 30px;
+        box-shadow: 0 3px 5px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 90%;
+        margin: 5% 0 0 3%;
+    }
+
+    .block-header {
+        padding: 15px 15px;
+        margin: 0;
+        text-decoration: none;
+        font-size: 40px;
+        font-weight: bold;
+        text-align: center;
+        color: #fff;
+        font-weight: 400;
+        width: 100%;
+        background: linear-gradient(#27a3df, #27a3df);
+    }
+
+    .p-navv {
+        font-size: 18px;
+        color: #fff;
+        background: linear-gradient(#27a3df, #27a3df);
+        margin-left: 5px;
+        border-radius: 10px;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3%;
+    }
+
+    .category-link {
+        color: #120902;
+    }
+
+    .description-link {
+        color: #120902;
+        margin-left: 10px;
+    }
+
+    .description-container {
+        display: none;
+        padding: 10px;
+        background-color: #f1f1f1;
+        border-radius: 4px;
+        width: 70%;
+        margin-left: 10px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        padding-top: 60px;
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 70%;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .close {
+        color: #aaa;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<div class="text-center p-pageWrapper">
+    </br>
+    <div class="auth-buttons">
+        
+         <form asp-action="RegisterUtilisateur" asp-controller="Utilisateur" method="post">
+            <button type="submit" class="p-navv text-white">S'inscrire</button>
+        </form>
+        <form asp-action="LoginUtilisateur" asp-controller="Utilisateur" method="post">
+            <button type="submit" class="p-navv text-white">Se connecter</button>
+        </form> 
+    </div>
+
+    <h1 class="display-4 block-h1">Forum sur l'Agriculture Tunisienne</h1>
+    </br>
+    </br>
+    <div>
+        <div class="custom-rectangle">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-linkedin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="rounded-image" data-url="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F">
+            </a>
+            <a href="https://api.whatsapp.com/send?text=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes%20https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://www.svgrepo.com/show/382712/whatsapp-whats-app.svg" alt="WhatsApp" class="rounded-image">
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://localhost:7203/" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://img.freepik.com/vecteurs-premium/logo-medias-sociaux-bleu_197792-1759.jpg?w=740" alt="Facebook" class="rounded-image">
+            </a>
+            <a href="mailto:?subject=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes&amp" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src=" https://www.iconbolt.com/iconsets/social-media-logos/email-gmail-logo-mail-social-social-media.svg" alt="Email" class="rounded-image">
+            </a>
+        </div>
+        <div class="box2" style="margin:auto;">
+            <div class="block-container">
+                <h2 class="block-header">Categories</h2>
+
+                @foreach (var cate in Model)
+                {
+                    <table style="margin:10px; ">
+                        <tr>
+                            <td width="100%" style="text-align: left;">
+                                <a href="@Url.Action("Index", "Forum", new { id = cate.Id })" class="category-link">@cate.Name</a>
+                            </td>
+                            <td width="15%">
+                                <div class="category-info">
+                                    <a class="description-link" onclick="toggleDescription('@Html.Raw(cate.Discription.Replace("'", "\\'"))')">Description</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div id="descriptionModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="descriptionContent"></div>
+    </div>
+</div>
+<script>
+
+    function toggleDescription(description) {
+        var modal = document.getElementById("descriptionModal");
+        var descriptionContent = document.getElementById("descriptionContent");
+
+        descriptionContent.innerHTML = "<p>" + description + "</p>";
+        modal.style.display = "block";
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    }
+
+    function closeModal() {
+        var modal = document.getElementById("descriptionModal");
+        modal.style.display = "none";
+    }
+</script>

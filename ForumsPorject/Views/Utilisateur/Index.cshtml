@@ -1,0 +1,68 @@
+﻿
+       
+@model IEnumerable<ForumsPorject.Models.InputUtilisateur>
+
+ @{
+    ViewData["Title"] = "Index";
+    // Layout = "~/Views/Descussion/Index.cshtml";
+} 
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<style>
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .rounded-image {
+        border-radius: 50%;
+        width: 50px; /* Ajustez la taille selon vos besoins */
+        height: 50px;
+        object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans le cercle */
+    }
+</style>
+<div class="text-center p-pageWrapper">
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <div class="card-header bg-dark text-light">
+                    <h1> les menbres du forum Terre Fertile</h1>
+            </div>
+                <div class="card-body">
+                    @foreach (var item in Model)
+                    {
+                        <div class="row mb-3">
+                            <div class="col">
+                                <strong>@Html.DisplayFor(modelItem => item.Pseudonyme)</strong>
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </div>
+                            <div class="col">
+                                @if (!string.IsNullOrEmpty(item.Cheminavatar))
+                                {
+                                    <img src="@item.Cheminavatar" alt="Avatar" class="rounded-image" />
+                                }
+                                else
+                                {
+                                    <text>Aucun avatar</text>
+                                }
+                            </div>
+                            <div class="col">
+                                @Html.DisplayFor(modelItem => item.Signature)
+                            </div>
+                            
+                            <div class="col">
+                                <a asp-action="Edit" asp-controller="Utilisateur" asp-route-id="@item.Id">Modifier</a>
+
+                                <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

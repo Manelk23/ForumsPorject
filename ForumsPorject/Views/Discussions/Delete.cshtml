@@ -1,0 +1,84 @@
+﻿@model ForumsPorject.Models.DiscussionModel
+
+@{
+    ViewData["Title"] = "Delete";
+    
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+    </ol>
+</nav>
+<style>
+ .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .rounded {
+        border-radius: 10%;
+        width: 200px; /* Ajustez la taille selon vos besoins */
+        height: 200px;
+        object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans le cercle */
+    }
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%; /* Ajuster la largeur selon vos besoins */
+        margin: 5% auto; /* Centrez le bloc horizontalement */
+    }
+
+
+    {
+        box-sizing: border-box;
+    }
+
+
+    table {
+        width: 100%; /* Utilisez 100% pour que le tableau occupe toute la largeur du conteneur */
+    }
+
+</style>
+<div class="p-pageWrapper">
+    <div class="container">
+        <h1 class="block-h1 text-center">Voulez-vous supprimer cette discussion ?</h1>
+
+        <div class="block-container mt-4">
+            <hr />
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        </br>
+                        <div class="form-group">
+                            <label asp-for="Title" class="control-label"></label>
+                            <input asp-for="Title" class="form-control" readonly />
+                            <span asp-validation-for="Title" class="text-danger"></span>
+                        </div>
+                        </br>
+                        <div class="form-group">
+                            <label asp-for="DateCreationDiscussion" class="control-label"></label>
+                            <input asp-for="DateCreationDiscussion" class="form-control" readonly />
+                            <span asp-validation-for="DateCreationDiscussion" class="text-danger"></span>
+                        </div>
+                        </br>
+                        <div class="form-group">
+                            <input type="submit" value="Supprimer" class="btn btn-warning" />
+
+                        </div>
+                        </br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

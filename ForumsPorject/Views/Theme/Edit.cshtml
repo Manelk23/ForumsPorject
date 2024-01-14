@@ -1,0 +1,97 @@
+﻿@model ForumsPorject.Models.ThemeModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="/">Forum</a></li> 
+        <li class="breadcrumb-item active" aria-current="page">Modifier</li>
+    </ol>
+</nav>
+<style>
+
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold; /* Utilisez 'font-weight' pour rendre le texte gras */
+        text-align: center; /* Utilisez 'text-align' pour centrer le texte */
+        margin-top: 3%;
+    }
+
+    
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%; /* Ajuster la largeur selon vos besoins */
+        margin: 5% 0 0 3%; /* Centrez le bloc */
+    }
+
+    .block-header {
+        padding: 15px 15px;
+        margin: 0;
+        text-decoration: none;
+        font-size: 20px;
+        text-align: center;
+        color: #f1f3f4;
+        width:40%;
+        height: 50px;
+        font-weight: 400;
+        background: linear-gradient(#d96500, #a64e02);
+    }
+
+    
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1 class="block-h1">Modifier ce Theme</h1>
+
+    <div class="block-container">
+
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+        
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+
+                    <div class="form-group">
+                    <label asp-for="Name" class="control-label" ></label>
+                        <input asp-for="Name" class="form-control" />
+                        </br>
+                        <span asp-validation-for="Name" class="text-danger">Le champ titre du theme est requis.</span>
+                    </div>
+                    </br>
+                   
+                    <div class="form-group">
+                        <label asp-for="Date" class="control-label"></label>
+                        <input asp-for="Date" class="form-control" />
+                        <span asp-validation-for="Date" class="text-danger"> Le champ date de création du theme est requis.</span>
+                    </div>
+                    </br>
+
+                    <div class="form-group">
+                        <input class="btn btn-success" type="submit" value="Enregistrer" />
+                    </div>
+                    </br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

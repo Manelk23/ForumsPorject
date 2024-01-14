@@ -1,0 +1,54 @@
+﻿@model ForumsPorject.Repository.Entites.Message
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Message</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ContenuMessage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ContenuMessage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DatecréationMessage)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DatecréationMessage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Lu)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Lu)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Archive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Archive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Auteur)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Auteur.UtilisateurId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Discussion)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Discussion.DiscussionId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.MessagesId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

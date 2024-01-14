@@ -1,0 +1,134 @@
+﻿@{
+    ViewData["Title"] = "Forums";
+}
+
+@model IEnumerable<ForumModel>
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Forums</li>
+    </ol>
+</nav>
+
+<style>
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+        margin:auto;
+        width: 100%;
+    }
+
+    .card img {
+        width:400px; /* ou toute autre valeur en pixels */
+        height: 200px; /* ou toute autre valeur en pixels */
+        margin: 0 auto; /* Centrez l'image horizontalement */
+        object-fit: cover;
+        border-top-left-radius: 15px; /* Adjust the radius as needed */
+        border-top-right-radius: 15px; /* Adjust the radius as needed */
+    }
+  
+   
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 3%;
+    }
+
+    .custom-card {
+        border-radius: 15px; /* Adjust the value as needed */
+    }
+
+    a {
+        color: white;
+    }
+
+    .custom-rectangle {
+        width: 80px;
+        height: auto;
+        background: #FFF;
+        padding: 16px;
+        text-align: center;
+        margin-left: auto;
+        margin-bottom: 0;
+        display: block;
+        position: fixed;
+        border-radius: 20px;
+        overflow: hidden;
+        -webkit-box-shadow: 0 3px 5px 0 rgba(0,1,1,.1);
+        box-shadow: 0 3px 5px 0 rgba(0,1,1,.1);
+    }
+
+    .btn-custom {
+        background-color: #5ccb5f;
+        color: #fff; /* Couleur du texte */
+    }
+        
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1 class="display-4 block-h1">Forum sur l'Agriculture Tunisienne</h1>
+    <br />
+    <br />
+    <a class="btn btn-success" style =" width: 50%" asp-action="Create" asp-route-categorieId="@Model.FirstOrDefault()?.CategorieId">Créer un nouveau forum</a>
+    <div>
+
+        <div class="custom-rectangle">
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-linkedin">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn" class="rounded-image" data-url="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F">
+            </a>
+            <a href="https://api.whatsapp.com/send?text=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes%20https%3A%2F%2Fwww.codeur.com%2Fblog%2Fcreer-un-forum%2F" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://www.svgrepo.com/show/382712/whatsapp-whats-app.svg" alt="WhatsApp" class="rounded-image">
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://localhost:7203/" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src="https://img.freepik.com/vecteurs-premium/logo-medias-sociaux-bleu_197792-1759.jpg?w=740" alt="Facebook" class="rounded-image">
+            </a>
+            <a href="mailto:?subject=Cr%C3%A9er%20un%20forum%20en%208%20%C3%A9tapes&amp" class="meks_ess-item socicon-whatsapp prevent-share-popup">
+                <img src=" https://www.iconbolt.com/iconsets/social-media-logos/email-gmail-logo-mail-social-social-media.svg" alt="Email" class="rounded-image">
+            </a>
+        </div>
+
+        <div class="d-flex justify-content-between">
+            <div class="row row-cols-1 row-cols-md-2 g-4" style="margin:auto;">
+                @foreach (var forum in Model)
+                {
+                    <div class="col">
+                        
+                        <div class="card custom-card" style="width: 25rem;margin:auto; margin-left: auto;">
+                            <img src="@forum.Discription" class="card-img-top" alt="Forum Image">
+                            <div class="card-body" style="background-color:#27a3df;font-family: 'Poppins';">
+                                <h2>
+                                    <a href="@Url.Action("Index", "Theme", new { id = forum.Id })" class="category-link">@forum.Name</a>
+                                </h2>
+                            </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">
+                                            <div class="d-flex justify-content-between">
+                                            <a class="btn btn-custom" type="submit" asp-action="Edit" asp-route-id="@forum.Id ">Modifier</a>
+                                            <a  class="btn btn-warning" type="submit" asp-action="Delete" asp-route-id="@forum.Id ">Supprimer</a>
+  
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                        </div>
+                            
+                    </div>
+                      
+                }
+                
+            </div>
+
+        </div>
+        </br>
+        </br>
+    </div>
+</div>

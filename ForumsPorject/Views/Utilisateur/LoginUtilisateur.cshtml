@@ -1,0 +1,108 @@
+﻿@model ForumsPorject.Models.LoginUtilisateurModel
+
+@{
+    ViewData["Title"] = "Se Connecter";
+}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Se Connecter</li>
+    </ol>
+</nav>
+<style>
+    .breadcrumb:active {
+        -webkit-text-size-adjust: 100%;
+        font-size: 120%;
+        font-family: 'Oxygen', sans-serif;
+        font-weight: 400;
+        color: #929494;
+        word-wrap: break-word;
+        --input-border-heavy: #dfe4e4;
+        --input-border-light: #f8f9f9;
+        box-sizing: border-box;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        margin-bottom: 5px;
+        line-height: 1.5;
+    }
+
+    .breadcrumb-item {
+        font-family: 'Font Awesome 5 Pro';
+        font-size: 120%; /* Taille plus grande du texte */
+        font-weight: 400;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #929494; /* Couleur gris pour l'état normal */
+    }
+
+        .breadcrumb-item a {
+            color: #929494; /* Couleur gris pour l'état normal */
+            font-size: 110%; /* Taille plus grande du texte */
+            font-weight: 400;
+        }
+
+        .breadcrumb-item:hover a {
+            color: #ff7e0d; /* Couleur gris pour l'état de survol */
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            content: '>'; /* Ajoute le symbole > entre les éléments de la miette de pain */
+            color: #929494; /* Couleur gris pour le symbole > */
+            margin: 0 5px; /* Marge autour du symbole > pour l'espacement */
+        }
+
+    .p-nav-list {
+        color: #fff;
+        background: #ff7e0d;
+    }
+
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1>@ViewData["Title"]</h1>
+
+    <form asp-action="LoginUtilisateur" method="post">
+        
+        <div class="row justify-content-center">
+            <div class="col-md-4">
+               
+<div 
+        <div class="form-group">
+            <label asp-for="Email">Email</label>
+            <input asp-for="Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+         <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
+            @* <span asp-validation-for="Password" class="text-danger"></span> *@
+            <span class="input-group-text" id="basic-addon1"><i class="fas fa-lock"></i></span>
+        </div>
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+             
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary"> Se connecter</button>
+        </div>
+        </div>
+        </div>
+    </form>
+
+</div>
+

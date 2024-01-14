@@ -1,0 +1,124 @@
+﻿@model ForumsPorject.Models.InputUtilisateur
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+    </ol>
+</nav>
+<style>
+
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold; /* Utilisez 'font-weight' pour rendre le texte gras */
+        text-align: center; /* Utilisez 'text-align' pour centrer le texte */
+        margin-top: 3%;
+    }
+
+    
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%; /* Ajuster la largeur selon vos besoins */
+        margin: 5% 0 0 3%; /* Centrez le bloc */
+    }
+
+    .block-header {
+        padding: 15px 15px;
+        margin: 0;
+        text-decoration: none;
+        font-size: 20px;
+        text-align: center;
+        color: #f1f3f4;
+        width:40%;
+        height: 50px;
+        font-weight: 400;
+        background: linear-gradient(#d96500, #a64e02);
+    }
+
+    
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1 class="block-h1">Modifier votre Compte</h1>
+
+    <div class="block-container">
+
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+        
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+
+                    <div class="form-group">
+                    <label asp-for="Pseudonyme" class="control-label" ></label>
+                        <input asp-for="Pseudonyme" class="form-control" />
+                        </br>
+                        <span asp-validation-for="Pseudonyme" class="text-danger">Le champ Pseudonyme est requis.</span>
+                    </div>
+                    </br>
+                   
+
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        </br>
+                        <span asp-validation-for="Email" class="text-danger">Le champ Email est requis.</span>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label asp-for="Cheminavatar" class="control-label"></label>
+                        <input asp-for="Cheminavatar" class="form-control" />
+                        </br>
+                        <span asp-validation-for="Cheminavatar" class="text-danger">Le champ Avatar est requis.</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Signature" class="control-label"></label>
+                        <input asp-for="Signature" class="form-control" />
+                        </br>
+                        <span asp-validation-for="Signature" class="text-danger">Le champ Signature est requis.</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" type="password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    
+                        </br>
+                        <span asp-validation-for="Password" class="text-danger">Le champ mot de passe est requis.</span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword"></label>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                   
+                    <div class="form-group">
+                        <input class="block-header btn btn-primary" type="submit" value="Enregistrer" />
+                    </div>
+                    </br>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+﻿@model IEnumerable<ForumsPorject.Models.MessageModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+        <li class="breadcrumb-item"><a href="/">Theme</a></li>
+        <li class="breadcrumb-item"><a href="/">Discussion</a></li>    
+        <li class="breadcrumb-item active" aria-current="page">Message</li>
+    </ol>
+</nav>
+<style>
+
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .rounded-image {
+        border-radius: 50%;
+        width: 50px; /* Ajustez la taille selon vos besoins */
+        height: 50px;
+        object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans le cercle */
+    }
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%; /* Ajuster la largeur selon vos besoins */
+        margin: 5% auto; /* Centrez le bloc horizontalement */
+    }
+
+    .block-header {
+        padding: 15px 15px;
+        margin: 0;
+        text-decoration: none;
+        font-size: 20px;
+        text-align: left;
+        color: #f1f3f4;
+        font-weight: 400;
+        background: linear-gradient(#2a8c4a, #2a8c4a);
+    }
+
+    {
+        box-sizing: border-box;
+    }
+
+    .block-body {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    table {
+        width: 100%; /* Utilisez 100% pour que le tableau occupe toute la largeur du conteneur */
+    }
+
+</style>
+<div class="text-center p-pageWrapper">
+
+    <a class="block-header" asp-action="Create" asp-route-discussionId="@Model.FirstOrDefault()?.Discussionid">Créer un nouveau message</a>
+
+    <div class="block-container">
+        <table class="table">
+            <tbody class="block-body">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContenuMessage)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DatecréationMessage)
+                        </td>
+                        <td>
+                            @if (!string.IsNullOrEmpty(item.AuteurAvatarChemin))
+                            {
+                                <img src="@item.AuteurAvatarChemin" alt="Avatar" class="rounded-image" />
+                            }
+                            else
+                            {
+                                <text>Aucun avatar</text>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AuteurPseudonyme)
+                        </td>
+                        <td>
+                            
+                            <a class="btn btn-custom" type="submit" asp-action="Edit" asp-route-id="@item.Id">Modifier</a>
+                            <a class="btn btn-warning" type="submit" asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                          
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

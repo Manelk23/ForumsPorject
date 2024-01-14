@@ -1,0 +1,81 @@
+﻿@model ForumsPorject.Models.MessageModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="/">Forum</a></li>
+        <li class="breadcrumb-item"><a href="/">Theme</a></li>
+        <li class="breadcrumb-item"><a href="/">Discussion</a></li>
+        <li class="breadcrumb-item"><a href="/">Message</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Create</li>
+    </ol>
+</nav>
+<style>
+
+    .p-pageWrapper {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f8f9fa;
+    }
+
+    .block-h1 {
+        font-size: 46px;
+        color: #120902;
+        font-weight: bold; /* Utilisez 'font-weight' pour rendre le texte gras */
+        text-align: center; /* Utilisez 'text-align' pour centrer le texte */
+        margin-top: 3%;
+    }
+
+    
+
+    .block-container {
+        color: #4b4c4c;
+        background: #fff;
+        border: 1px solid #edf0f0;
+        border-radius: 4px;
+        width: 95%; /* Ajuster la largeur selon vos besoins */
+        margin: 5% 0 0 3%; /* Centrez le bloc */
+    }
+
+   
+    
+</style>
+
+<div class="text-center p-pageWrapper">
+    <h1 class="block-h1">Modifier votre message</h1>
+
+    <div class="block-container">
+
+        <hr />
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+        
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+
+                    <div class="form-group">
+                    <label asp-for="ContenuMessage" class="control-label" ></label>
+                        <input asp-for="ContenuMessage" class="form-control" />
+                        </br>
+                        <span asp-validation-for="ContenuMessage" class="text-danger">Le champ Contenu de Message est requis.</span>
+                    </div>
+                    </br>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-success" value="Enregistrer" />
+                    </div>
+                    </br>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
