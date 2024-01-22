@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR;
+using System.Data;
 
 namespace ForumsPorject.Services
 {
@@ -33,7 +34,10 @@ namespace ForumsPorject.Services
             _logger = logger;
             _httpContextAccessor = httpContextAccessor;
         }
-
+        public async Task<bool> IsEmailUniqueAsync(string email)
+        {
+            return await _utilisateurRepository.IsEmailUniqueAsync(email);
+        }
         public async Task<Utilisateur> CreateUtilisateurAsync(string pseudonyme, string email, string cheminavatar, string signature, string password)
         {
             // Hash password
@@ -61,7 +65,7 @@ namespace ForumsPorject.Services
 
             // Génération du jeton JWT
             var roles = await GetRolesForUserAsync(utilisateur.UtilisateurId);
-            
+
             var token = _jwtService.GenerateToken(utilisateur);
 
 
@@ -69,8 +73,12 @@ namespace ForumsPorject.Services
 
             return utilisateur;
         }
-       
-       
+
+        public async Task<Utilisateur> GetUserByIdAsync(int utilisateurId)
+        {
+            // Utilisez votre méthode GetByIdAsync du repository pour récupérer l'utilisateur par ID
+            return await _utilisateurRepository.GetByIdAsync(utilisateurId);
+        }
         public async Task<Utilisateur> Authentifier(string email, string motDePasse)
         {
             // Récupère l'utilisateur de la base de données.
@@ -94,62 +102,13 @@ namespace ForumsPorject.Services
                     return utilisateur;
                 }
             }
-
             // Renvoie null si l'utilisateur n'est pas authentifié.
             return null;
         }
-
-        public async Task AddAdditionalRoleAsync(int utilisateurId, string roleName)
-        {
-            var utilisateur = await _utilisateurRepository.GetByIdAsync(utilisateurId);
-
-            if (utilisateur != null)
-            {
-                var role = await _appRoleRepository.GetBySimpleRoleAsync(roleName);
-
-                if (role != null)
-                {
-                    // Assurez-vous que l'utilisateur n'a pas déjà le rôle
-                    var userRoles = await GetRolesForUserAsync(utilisateurId);
-                    if (!userRoles.Any(r => r == roleName))  // Modification ici
-                    {
-                        await AddAppRoleAsync(role, utilisateur);
-                    }
-                }
-            }
-        }
-
+       
         public async Task<IList<string>> GetRolesForUserAsync(int utilisateurId)
         {
             return (IList<string>)await _utilisateurRepository.GetRolesForUserAsync(utilisateurId);
-        }
-
-
-        public async Task<Utilisateur> GetUserByIdAsync(int utilisateurId)
-        {
-            // Utilisez votre méthode GetByIdAsync du repository pour récupérer l'utilisateur par ID
-            return await _utilisateurRepository.GetByIdAsync(utilisateurId);
-        }
-        public async Task AddAppRoleAsync(AppRole appRole, Utilisateur utilisateur)
-        {
-            if (utilisateur == null)
-            {
-                throw new InvalidOperationException("L'utilisateur doit exister pour ajouter un rôle.");
-            }
-
-            if (appRole == null)
-            {
-                throw new ArgumentNullException(nameof(appRole));
-            }
-
-            var utilisateurRoles = new UtilisateurRole
-            {
-                UtilisateurID = utilisateur.UtilisateurId,
-                AppRoleId = appRole.AppRoleId
-            };
-
-            await _utilisateurRepository.AddUtilisateurRoleAsync(utilisateurRoles);
-            await _utilisateurRepository.SaveChangesAsync();
         }
 
         public async Task DeleteUtilisateurAsync(int id)
@@ -164,14 +123,6 @@ namespace ForumsPorject.Services
 
             // Delete user
             _utilisateurRepository.Remove(utilisateur);
-            await _utilisateurRepository.SaveChangesAsync();
-        }
-
-        
-
-        public async Task SaveUtilisateurAsync(Utilisateur utilisateur)
-        {
-            await _utilisateurRepository.UpdateAsync(utilisateur);
             await _utilisateurRepository.SaveChangesAsync();
         }
 
@@ -216,10 +167,7 @@ namespace ForumsPorject.Services
 
             return false; // Message non trouvé ou utilisateur non autorisé
         }
-        public async Task<bool> IsEmailUniqueAsync(string email)
-        {
-            return await _utilisateurRepository.IsEmailUniqueAsync(email);
-        }
+       
         
 
     }

@@ -25,9 +25,15 @@ namespace ForumsPorject.Repository.ClassesRepository {
                 .Where(m => m.Discussionid == discussionId)
                 .ToList();
         }
+       
+        public async Task<IEnumerable<Message>> GetByIdsAsync(IEnumerable<int> messageIds)
+        {
+            var messages = await _context.Messages
+                .Where(m => messageIds.Contains(m.MessagesId))
+                .ToListAsync();
 
-
-
+            return messages;
+        }
 
 
         public async Task<Message?> GetByIdAsync(int id)
@@ -94,6 +100,19 @@ namespace ForumsPorject.Repository.ClassesRepository {
         {
             await _context.Set<Message>().AddAsync(entity);
             await _context.SaveChangesAsync();
+        }
+
+
+        public async Task<List<Message>> GetMessagesCreer(int utilisateurId)
+        {
+            // Implémentez la logique pour récupérer les messages créés par l'utilisateur
+            // Utilisez votre _messageService ou tout autre mécanisme de récupération de données
+
+            var messages = await _context.Messages
+                .Where(m => m.AuteurId == utilisateurId)
+                .ToListAsync();
+
+            return messages;
         }
     }
 }

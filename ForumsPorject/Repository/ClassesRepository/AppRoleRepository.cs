@@ -24,6 +24,18 @@ namespace ForumsPorject.Repository.ClassesRepository
             await _context.SaveChangesAsync();
         }
 
+        public async Task<AppRole> CreateDefaultRoleAsync()
+        {
+            var defaultRole = new AppRole { SimpleRole = "SimpleUser" };
+            await _context.AppRoles.AddAsync(defaultRole);
+            await _context.SaveChangesAsync();
+            return defaultRole;
+        }
+
+
+
+
+
         public async Task AddRangeAsync(IEnumerable<AppRole> entities)
         {
             await _context.AppRoles.AddRangeAsync(entities);
@@ -103,14 +115,8 @@ namespace ForumsPorject.Repository.ClassesRepository
             await _context.AddAsync(utilisateurRoles);
             await _context.SaveChangesAsync();
         }
-        public async Task<AppRole> CreateDefaultRoleAsync()
-        {
-            var defaultRole = new AppRole { SimpleRole = "SimpleUser" };
-            await _context.AppRoles.AddAsync(defaultRole);
-            await _context.SaveChangesAsync();
-            return defaultRole;
-        }
-
+       
+       
 
     }
 }

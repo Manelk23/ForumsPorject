@@ -2,6 +2,7 @@
 using ForumsPorject.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
@@ -13,17 +14,25 @@ namespace ForumsPorject.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly CategoryService _categoryService;
-       
+        private readonly MessageService _messageService;
+        private readonly JwtService _jwtService;
 
-        public HomeController(ILogger<HomeController> logger, CategoryService categoryService)
+
+        public HomeController(ILogger<HomeController> logger, CategoryService categoryService,
+            DescussionService descService, MessageService messageService, JwtService jwtService)
         {
             _logger = logger;
             _categoryService = categoryService;
             
+            _messageService = messageService;
+            _jwtService = jwtService;
+
         }
+
 
         public async Task<IActionResult> Index()
         {
+
             var categories = await _categoryService.GetAll();
             var categoryModels = new List<CategoryModel>();
 
@@ -41,7 +50,7 @@ namespace ForumsPorject.Controllers
 
             return View(categoryModels);
         }
-        
+
         public IActionResult Privacy()
         {
             return View();
@@ -56,18 +65,15 @@ namespace ForumsPorject.Controllers
 
             if (message != null)
             {
-               
-                    ViewData["Title"] = "Error";
-                    ViewData["ErrorMessage"] = message;
-                    return View("Error");
-               
+
+                ViewData["Title"] = "Error";
+                ViewData["ErrorMessage"] = message;
+                return View("Error");
+
             }
-
-            
-
             return View("Error");
         }
 
-             
+        
     }
 }

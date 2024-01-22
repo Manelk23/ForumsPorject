@@ -18,17 +18,6 @@ namespace ForumsPorject.Repository.ClassesRepository
             {
                 _context = context;
             }
-
-        public async Task<Discussion> GetByIdAsync(int id)
-        {
-            return await _context.Set<Discussion>().FindAsync(id);
-        }
-
-        public async Task<IEnumerable<Discussion>> GetAllAsync()
-        {
-            return await _context.Set<Discussion>().ToListAsync();
-        }
-
         public IQueryable<Discussion> Find(Expression<Func<Discussion, bool>> predicate)
         {
             return _context.Set<Discussion>().Where(predicate);
@@ -36,17 +25,17 @@ namespace ForumsPorject.Repository.ClassesRepository
 
         public async Task AddAsync(Discussion entity)
         {
-           
+
             await _context.Discussions.AddAsync(entity);
             await _context.SaveChangesAsync();
         }
-
-        public async Task AddDiscussionAsync(Discussion discussion)
+        public async Task<Discussion> GetByIdAsync(int id)
         {
-            // Ajouter la discussion à la DbSet
-            _context.Discussions.Add(discussion);
-
-            // Enregistrer les modifications dans la base de données
+            return await _context.Set<Discussion>().FindAsync(id);
+        }
+        public async Task UpdateAsync(Discussion entity)
+        {
+            _context.Set<Discussion>().Update(entity);
             await _context.SaveChangesAsync();
         }
 
@@ -57,6 +46,10 @@ namespace ForumsPorject.Repository.ClassesRepository
         }
 
 
+        public async Task<IEnumerable<Discussion>> GetAllAsync()
+        {
+            return await _context.Set<Discussion>().ToListAsync();
+        }
 
         public async Task AddRangeAsync(IEnumerable<Discussion> entities)
         {
@@ -70,28 +63,22 @@ namespace ForumsPorject.Repository.ClassesRepository
             _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(Discussion entity)
-        {
-            _context.Set<Discussion>().Update(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public void UpdateRange(IEnumerable<Discussion> entities)
-        {
-            _context.Set<Discussion>().UpdateRange(entities);
-            _context.SaveChanges();
-        }
-
         public void Remove(Discussion entity)
         {
             _context.Set<Discussion>().Remove(entity);
             _context.SaveChanges();
         }
-
-        public void RemoveRange(IEnumerable<Discussion> entities)
+        public async Task<List<Discussion>> GetDiscussionsCreer(int utilisateurId)
         {
-            _context.Set<Discussion>().RemoveRange(entities);
-            _context.SaveChanges();
+            // Implémentez la logique pour récupérer les discussions créées par l'utilisateur
+            // Utilisez votre _descService ou tout autre mécanisme de récupération de données
+
+            var discussions = await _context.Discussions
+                .Where(d => d.Utilisateurid == utilisateurId)
+                .ToListAsync();
+
+            return discussions;
         }
+
     }
 }

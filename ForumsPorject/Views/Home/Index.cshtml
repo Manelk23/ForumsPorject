@@ -185,10 +185,10 @@
 <div class="text-center p-pageWrapper">
     </br>
     <div class="auth-buttons">
-        
-         <form asp-action="RegisterUtilisateur" asp-controller="Utilisateur" method="post">
+        <a type="submit" class="p-navv text-white" asp-action="RegisterUtilisateur" asp-controller="Utilisateur" method="post">S'inscrire</a>
+         @* <form asp-action="RegisterUtilisateur" asp-controller="Utilisateur" method="post">
             <button type="submit" class="p-navv text-white">S'inscrire</button>
-        </form>
+        </form> *@
         <form asp-action="LoginUtilisateur" asp-controller="Utilisateur" method="post">
             <button type="submit" class="p-navv text-white">Se connecter</button>
         </form> 
@@ -236,7 +236,6 @@
         </div>
     </div>
 
-</div>
 
 
 <div id="descriptionModal" class="modal">
@@ -245,24 +244,28 @@
         <div id="descriptionContent"></div>
     </div>
 </div>
-<script>
+    <script>
+        function toggleDescription(description) {
+            console.log("Toggle description function called.");
+            var modal = document.getElementById("descriptionModal");
+            var descriptionContent = document.getElementById("descriptionContent");
 
-    function toggleDescription(description) {
-        var modal = document.getElementById("descriptionModal");
-        var descriptionContent = document.getElementById("descriptionContent");
+            console.log("Description:", description);
 
-        descriptionContent.innerHTML = "<p>" + description + "</p>";
-        modal.style.display = "block";
+            descriptionContent.innerHTML = "<p>" + description + "</p>";
+            modal.style.display = "block";
 
-        window.onclick = function (event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        };
-    }
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
 
-    function closeModal() {
-        var modal = document.getElementById("descriptionModal");
-        modal.style.display = "none";
-    }
-</script>
+        function closeModal() {
+            console.log("Close modal function called.");
+            var modal = document.getElementById("descriptionModal");
+            modal.style.display = "none";
+        }
+    </script>
+</div>

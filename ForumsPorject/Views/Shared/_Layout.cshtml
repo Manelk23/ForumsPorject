@@ -14,15 +14,12 @@
             color: #fff;
             background: linear-gradient(#006414, #006414);
         }
-
         .auth-link {
             transition: background-color 0.3s;
         }
-
             .auth-link:hover {
                 background-color: #27a3df;
             }
-
         .rounded-image {
             border-radius: 50%;
             width: 50px; /* Ajustez la taille selon vos besoins */
@@ -38,7 +35,6 @@
                 <a class="navbar-brand text-white auth-link" asp-area="" asp-controller="Home" asp-action="Index">Terre Fertile</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
@@ -53,13 +49,25 @@
                         <li class="nav-item">
                             @if (!string.IsNullOrEmpty(Context.Request.Cookies["Cheminavatar"]))
                             {
-                                <img src="@Context.Request.Cookies["Cheminavatar"]" @* alt="Avatar" *@ class="rounded-image" />
+                                <img src="@Context.Request.Cookies["Cheminavatar"]" class="rounded-image" />
                             }
+                        </li>
+                        </br>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Utilisateur" asp-action="ApresConnexion" class="position-relative">
+                                <img src="https://previews.123rf.com/images/djvstock/djvstock1705/djvstock170501794/77259659-email-ou-mail-symbol-icon-vector-illustration-de-conception-graphique.jpg" class="auth-link nav-link text-white rounded-image" />
+                                <!-- Ajoutez la balise <span> pour afficher le nombre de messages non lus -->
+                                <span id="unreadMessagesCount" class="badge badge-danger position-absolute top-0 start-100 translate-middle">
+                                    <!-- ... (le nombre de messages non lus sera ajouté ici) ... -->
+                                </span>
+                            </a>
                         </li>
                         <br/>
                        <li class="nav-item">
-                            <a class="auth-link nav-link text-white" asp-area="" asp-controller="Utilisateur" asp-action="Lgout" method="post">Déconnexion</a>
+                            <a class="auth-link nav-link text-white" asp-area="" asp-controller="Utilisateur" asp-action="Logout" >Déconnexion</a>
                        </li>
+                        <br />
+                        
                     </ul>
                 </div>
             </div>
@@ -79,5 +87,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+        // Récupérez le nombre de messages non lus depuis le cookie et mettez à jour la balise <span>
+        var unreadMessagesCount = parseInt(document.cookie.replace(/(?:(?:^|.*;\s*)UnreadMessagesCount\s*\=\s*([^;]*).*$)|^.*$/, "$1")) || 0;
+        var unreadMessagesCountElement = document.getElementById('unreadMessagesCount');
+        unreadMessagesCountElement.innerText = unreadMessagesCount > 0 ? unreadMessagesCount.toString() : '';
+        // Ajoutez la classe Bootstrap pour la couleur rouge
+        unreadMessagesCountElement.classList.add('bg-danger', 'rounded-circle', 'p-1');
+    </script>
 </body>
 </html>

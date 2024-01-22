@@ -24,7 +24,7 @@ namespace ForumsPorject.Controllers
             _descussionService = descussionService;
         }
 
-
+        [Route("Message/Index/{id?}")]
         public async Task<IActionResult> Index(int? id)
         {
             if (!id.HasValue)
@@ -110,12 +110,12 @@ namespace ForumsPorject.Controllers
 
                         // Rechargez la liste des  et renvoyez la vue avec le modèle
                         ViewData["Discussionid"] = new SelectList("NomDiscussion");
-                        return RedirectToAction("Index", "Message"); ;
+                        return RedirectToAction("Index", "Message", new { id = Property });
                     }
                     else
                     {
                         // Gérer le cas où le token n'est pas présent
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Error", "Home", new { message = "Vous devez créer un compte ou vous connecter." });
                     }
 
                 }
@@ -155,15 +155,21 @@ namespace ForumsPorject.Controllers
 
                 // Récupère l'ID de l'utilisateur depuis les revendications
                 var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var rolesCookie = Request.Cookies["Roles"];
 
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
                 // Récupère le message selon son id 
                 var message = await _messageService.GetMessageByIdAsync(Id);
 
-                if (utilisateurId != message.AuteurId)
+                if (rolesList == null ||
+                   (!rolesList.Contains("Administrateur") &&
+                   utilisateurId != message.AuteurId &&
+                   utilisateurId != message.Discussion?.Utilisateurid))
                 {
                     // Retourner une vue ou une redirection avec un message d'erreur
                     // en indiquant que l'utilisateur n'est pas autorisé à modifier ce message.
-                    return RedirectToAction("Error", new { message = "Vous n'êtes pas autorisé à modifier ce message." });
+                    return RedirectToAction("Error", "Home", new { message = "Vous n'êtes pas autorisé à modifier ce message." });
                 }
 
                 // Crée le modèle de message
@@ -234,18 +240,24 @@ namespace ForumsPorject.Controllers
                 // Decode le token pour récupérer les revendications
                 var claimsPrincipal = _jwtService.DecodeToken(accessToken);
 
+
                 // Récupère l'ID de l'utilisateur depuis les revendications
                 var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var rolesCookie = Request.Cookies["Roles"];
 
-                // Récupère le message selon son id
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
+                // Récupère le message selon son id 
                 var message = await _messageService.GetMessageByIdAsync(id);
 
-                // Vérifie si l'utilisateur a le droit de supprimer ce message
-                if (utilisateurId != message.AuteurId)
+                if (rolesList == null ||
+                   (!rolesList.Contains("Administrateur") &&
+                   utilisateurId != message.AuteurId &&
+                   utilisateurId != message.Discussion?.Utilisateurid))
                 {
                     // Retourner une vue ou une redirection avec un message d'erreur
-                    // en indiquant que l'utilisateur n'est pas autorisé à supprimer ce message.
-                    return RedirectToAction("Error", new { message = "Vous n'êtes pas autorisé à supprimer ce message." });
+                    // en indiquant que l'utilisateur n'est pas autorisé à modifier ce message.
+                    return RedirectToAction("Error", "Home", new { message = "Vous n'êtes pas autorisé à supprimé ce message ." });
                 }
 
                 if (message == null)
@@ -290,10 +302,6 @@ namespace ForumsPorject.Controllers
                      messageMod.AuteurPseudonyme
                      );
                 // Valide le modèle
-
-
-
-
             }
             catch (EntityNotFoundException)
             {
@@ -301,32 +309,73 @@ namespace ForumsPorject.Controllers
             }
 
             return RedirectToAction("Index", "Home"); // Redirige vers la page d'accueil après la suppression
-        }      }      }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsRead(List<int> messageIds)
+        {
+            try
+            {
+                // Récupère le token depuis le cookie
+                var accessToken = HttpContext.Request.Cookies["AccessToken"];
 
-//        [HttpGet("user/{userId}")]
-//        public async Task<IActionResult> GetMessagesByUserId(int userId)
-//        {
-//            var messages = await _messageService.GetMessagesByUserIdAsync(userId);
-//            return Ok(messages);
-//        }
+                // Vérifie si le token est présent
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return NotFound();
+                }
+
+                // Decode le token pour récupérer les revendications
+                var claimsPrincipal = _jwtService.DecodeToken(accessToken);
+
+                // Récupère l'ID de l'utilisateur depuis les revendications
+                var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var rolesCookie = Request.Cookies["Roles"];
+
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
+
+                if (messageIds != null && messageIds.Any())
+                {
+                    // Récupérer les messages à partir des IDs
+                    var messages = await _messageService.GetMessagesByIdsAsync(messageIds);
+
+                    // Vérifier les autorisations pour chaque message
+                    foreach (var message in messages)
+                    {
+                        if (rolesList == null ||
+                             (!rolesList.Contains("Administrateur") &&
+                               utilisateurId != message.AuteurId &&
+                                utilisateurId != message.Discussion?.Utilisateurid))
+                        {
+                            
+                            return RedirectToAction("Error", "Home", new { message = "Vous n'êtes pas autorisé à marquer comme lu ce message." });
+                        }
+
+                        // Mettre à jour l'état du message
+                        await _messageService.MarkMessagesAsReadAsync(message);
+                    }
+
+                    return RedirectToAction("Index", "Message", new { id = Property }); // Rediriger vers la vue des messages ou toute autre action appropriée
+                }
+
+                // Gérer le cas où aucun message n'est sélectionné
+                return RedirectToAction("Index", "Message", new { id = Property });
+            }
+            catch (Exception ex)
+            {
+                // Gérer les erreurs
+                ViewData["ErrorMessage"] = ex.Message;
+                Console.WriteLine(ex.ToString());
+                return RedirectToAction("Error");
+            }
+        }
 
 
-//        [HttpGet("withAvatar")]
-//        public async Task<IActionResult> GetMessagesWithAvatar()
-//        {
-//            var messages = await _messageService.GetMessagesWithAvatarAsync();
-//            return Ok(messages);
-//        }
 
-//        [HttpPost("handleUserLoggedIn")]
-//        public async Task<IActionResult> HandleUserLoggedIn([FromBody] int userId)
-//        {
-//            await _messageService.HandleUserLoggedInAsync(userId);
-//            return Ok();
-//        }
+    }
+}
 
-//    }
-//}
 
 
 

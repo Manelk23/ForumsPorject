@@ -37,6 +37,11 @@ namespace ForumsPorject.Repository.ClassesRepository
             return await _context.Set<Forum>().ToListAsync();
         }
 
+        public async Task UpdateAsync(Forum entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
         public IQueryable<Forum> Find(Expression<Func<Forum, bool>> predicate)
         {
             return _context.Set<Forum>().Where(predicate);
@@ -48,23 +53,6 @@ namespace ForumsPorject.Repository.ClassesRepository
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddRangeAsync(IEnumerable<Forum> entities)
-        {
-            await _context.Set<Forum>().AddRangeAsync(entities);
-        }
-
-        public void Update(Forum entity)
-        {
-            _context.Entry(entity).State = EntityState.Modified;
-        }
-
-        public void UpdateRange(IEnumerable<Forum> entities)
-        {
-            foreach (var entity in entities)
-            {
-                _context.Entry(entity).State = EntityState.Modified;
-            }
-        }
         public async Task RemoveAsyn(Forum entity)
         {
 
@@ -86,16 +74,12 @@ namespace ForumsPorject.Repository.ClassesRepository
             _context.Set<Forum>().Remove(entity);
         }
 
-        public void RemoveRange(IEnumerable<Forum> entities)
-        {
-            _context.Set<Forum>().RemoveRange(entities);
-        }
-        public async Task UpdateAsync(Forum entity)
+        public void Update(Forum entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
         }
-       
+
+
     }
 }
 

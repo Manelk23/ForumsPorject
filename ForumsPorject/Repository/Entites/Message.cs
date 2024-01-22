@@ -40,6 +40,9 @@ namespace ForumsPorject.Repository.Entites
 
         [ForeignKey(nameof(Discussionid))]
         [InverseProperty("Messages")]
+        
         public virtual Discussion Discussion { get; set; } = null!;
+
+        public virtual ICollection<MessageReadState> MessageReadStates { get; set; } = new List<MessageReadState>();
     }
 }

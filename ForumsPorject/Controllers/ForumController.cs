@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Security.Claims;
 using ForumsPorject.Repository.ClassesRepository;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ForumProject.Controllers
 {
@@ -22,12 +23,29 @@ namespace ForumProject.Controllers
             _jwtService = jwtService;
             _utilisateurService = utilisateurService;
         }
+
         public async Task<IActionResult> Index(int? id)
         {
+            var accessToken = HttpContext.Request.Cookies["AccessToken"];
+            if (accessToken == null)
+            {
+                TempData["ErrorMessage"] = "Vous devez vous connecter pour accéder à cette page.";
+                return RedirectToAction("Error", "Home", new { message = TempData["ErrorMessage"] });
+            }
+            // Decode le token pour récupérer les revendications
+            var claimsPrincipal = _jwtService.DecodeToken(accessToken);
+            
+
+            // Récupère l'ID de l'utilisateur depuis les revendications
+            var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+           
+            
+
             if (!id.HasValue)
             {
                 return BadRequest("Category ID is required");
             }
+
             Property = id.Value;
             var forumes = await _service.GetForumsByCategoryIdAsync(id.Value);
 
@@ -45,17 +63,43 @@ namespace ForumProject.Controllers
                     Id = forum.ForumId,
                     Name = forum.TitreForum,
                     dateCreation = forum.DateCreationForum,
-                    Discription= forum.DiscriptionForum,
+                    Discription = forum.DiscriptionForum,
                 };
                 forumsModels.Add(forumesMod);
             }
 
             return View(forumsModels);
         }
+
         // GET: Forum/Create
         public IActionResult Create()
         {
-            ViewData["Ctegirieid"] = new SelectList("NomCtegorie");
+                // Récupère le token depuis le cookie
+                var accessToken = HttpContext.Request.Cookies["AccessToken"];
+
+                // Vérifie si le token est présent
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return NotFound();
+                }
+
+                // Decode le token pour récupérer les revendications
+                var claimsPrincipal = _jwtService.DecodeToken(accessToken);
+                // Récupère l'ID de l'utilisateur depuis les revendications
+                var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                // Récupère les rôles à partir du cookie "Roles"
+                var rolesCookie = Request.Cookies["Roles"];
+
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
+
+                // Vérifie si l'utilisateur a le rôle d'administrateur
+                if (rolesList == null || !rolesList.Contains("Administrateur"))
+                {
+                // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
+                return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+            }
+                ViewData["Ctegirieid"] = new SelectList("NomCtegorie");
             return View();
         }
         [HttpPost]
@@ -65,6 +109,8 @@ namespace ForumProject.Controllers
         {
             try
             {
+  
+
                 if (ModelState.IsValid)
                 {
                     // Récupère le token depuis le cookie
@@ -77,7 +123,18 @@ namespace ForumProject.Controllers
 
                         // Récupère l'ID de l'utilisateur depuis les revendications
                         var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                        // Récupère les rôles à partir du cookie "Roles"
+                        var rolesCookie = Request.Cookies["Roles"];
 
+                        // Divisez la chaîne des rôles en une liste
+                        var rolesList = rolesCookie?.Split(',');
+
+                        // Vérifie si l'utilisateur a le rôle d'administrateur
+                        if (rolesList == null || !rolesList.Contains("Administrateur"))
+                        {
+                            // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
+                            return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+                        }
                         // Appelle le service avec les informations nécessaires
                         await _service.CreateForumAsync(
                             forumModel.Name,
@@ -116,9 +173,34 @@ namespace ForumProject.Controllers
         {
             try
             {
+                // Récupère le token depuis le cookie
+                var accessToken = HttpContext.Request.Cookies["AccessToken"];
+
+                // Vérifie si le token est présent
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return NotFound();
+                }
+
+
+                // Decode le token pour récupérer les revendications
+                var claimsPrincipal = _jwtService.DecodeToken(accessToken);
+                // Récupère l'ID de l'utilisateur depuis les revendications
+                var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                // Récupère les rôles à partir du cookie "Roles"
+                var rolesCookie = Request.Cookies["Roles"];
+
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
+
+                // Vérifie si l'utilisateur a le rôle d'administrateur
+                if (rolesList == null || !rolesList.Contains("Administrateur"))
+                {
+                    // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
+                    return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+                }
                 // Récupère le message selon son id 
                 var forum = await _service.GetForumByIdAsync(Id);
-
                 // Crée le modèle de message
                 var forumMod = new ForumModel
                 {
@@ -144,13 +226,34 @@ namespace ForumProject.Controllers
         public async Task<IActionResult> Edit(ForumModel forumMod)
         {
             try
-            {
+            { // Récupère le token depuis le cookie
+                var accessToken = HttpContext.Request.Cookies["AccessToken"];
+                // Vérifie si le token est présent
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return NotFound();
+                }
+                // Decode le token pour récupérer les revendications
+                var claimsPrincipal = _jwtService.DecodeToken(accessToken);
+                // Récupère l'ID de l'utilisateur depuis les revendications
+                var utilisateurId = int.Parse(claimsPrincipal.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                // Récupère les rôles à partir du cookie "Roles"
+                var rolesCookie = Request.Cookies["Roles"];
+
+                // Divisez la chaîne des rôles en une liste
+                var rolesList = rolesCookie?.Split(',');
+
+                // Vérifie si l'utilisateur a le rôle d'administrateur
+                if (rolesList == null || !rolesList.Contains("Administrateur"))
+                {
+                    // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
+                    return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+                }
                 // Valide le modèle
                 if (!ModelState.IsValid)
                 {
                     return View(forumMod);
                 }
-
                 // Effectue la mise à jour du message
                 var updateResult = await _service.UpdateForumAsync(
                     forumMod.Id,
@@ -159,7 +262,6 @@ namespace ForumProject.Controllers
                     forumMod.Discription
 
                 );
-
                 // Redirige vers la page d'index si la mise à jour est réussie
                 return RedirectToAction("Index", "Home");
             }
@@ -180,14 +282,11 @@ namespace ForumProject.Controllers
             {
                 // Récupère le token depuis le cookie
                 var accessToken = HttpContext.Request.Cookies["AccessToken"];
-
                 // Vérifie si le token est présent
                 if (string.IsNullOrEmpty(accessToken))
                 {
                     return NotFound();
                 }
-
-           
                 // Decode le token pour récupérer les revendications
                 var claimsPrincipal = _jwtService.DecodeToken(accessToken);
                 // Récupère l'ID de l'utilisateur depuis les revendications
@@ -202,16 +301,14 @@ namespace ForumProject.Controllers
                 if (rolesList == null || !rolesList.Contains("Administrateur"))
                 {
                     // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
-                    return StatusCode(403, "Accès interdit");
+                    return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+
                 }
-
-
                 var forum = await _service.GetForumByIdAsync(id);
                 if (forum == null)
                 {
                     return NotFound(); // Le message n'a pas été trouvé
                 }
-
                 // Passe le modèle à la vue de confirmation
                 var forumMod = new ForumModel
                 {
@@ -237,14 +334,11 @@ namespace ForumProject.Controllers
             try { 
             // Récupère le token depuis le cookie
             var accessToken = HttpContext.Request.Cookies["AccessToken"];
-
             // Vérifie si le token est présent
             if (string.IsNullOrEmpty(accessToken))
             {
                 return NotFound();
             }
-
-
             // Decode le token pour récupérer les revendications
             var claimsPrincipal = _jwtService.DecodeToken(accessToken);
             // Récupère l'ID de l'utilisateur depuis les revendications
@@ -258,23 +352,18 @@ namespace ForumProject.Controllers
             // Vérifie si l'utilisateur a le rôle d'administrateur
             if (rolesList == null || !rolesList.Contains("Administrateur"))
             {
-                // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
-                return StatusCode(403, "Accès interdit");
-            }
-
-
-
+                    // Si l'utilisateur n'a pas le rôle d'administrateur, retourne une réponse interdite
+                    return RedirectToAction("Error", "Home", new { message = "Accés Interdit, vous pouvez céer une discussion ou bien partager des messages. Merci" });
+                }
             if (!ModelState.IsValid)
                 {
                     return View(forumMod);
                 }
-
                 // Supprime le message
                 await _service.RemoveForum(forumMod.Id,
                      forumMod.Name,
                      forumMod.dateCreation,
                      forumMod.Discription
-
                      );
                 // Valide le modèle
             }
@@ -282,7 +371,6 @@ namespace ForumProject.Controllers
             {
                 return NotFound();
             }
-
             return RedirectToAction("Index", "Home"); // Redirige vers la page d'accueil après la suppression
         }
     }

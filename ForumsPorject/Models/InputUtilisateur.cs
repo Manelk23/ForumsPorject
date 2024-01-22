@@ -13,10 +13,10 @@ namespace ForumsPorject.Models
         [Display(Name = "Pseudonyme")]
         public string? Pseudonyme { get; set; }
 
-
+       
         [Remote(action: "IsEmailUnique", controller: "Utilisateur", ErrorMessage = "Cet e-mail est déjà utilisé.")]
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Le champ e-mail est requis.")]
+        [EmailAddress(ErrorMessage = "Veuillez fournir une adresse e-mail valide.")]
         [Display(Name = "Email")]
         public string? Email { get; set; }
 
@@ -47,12 +47,5 @@ namespace ForumsPorject.Models
         [Display(Name = "Roles")]
         public string? Roles { get; set; }
 
-
-
-        // Convert cheminavatar property to string
-        //public string CheminavatarToString
-        //{
-        //    get { return Cheminavatar.ToString(); }
-        //}
     }
 }

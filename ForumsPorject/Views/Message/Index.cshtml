@@ -92,9 +92,15 @@
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.AuteurPseudonyme)
+
                         </td>
                         <td>
-                            
+                            <input type="checkbox" class="mark-as-read-checkbox" data-message-id="@item.Id" />
+                            <label for="mark-as-read-checkbox">Lu</label>
+                        </td>
+                        <td>
+                        <td>
+                           
                             <a class="btn btn-custom" type="submit" asp-action="Edit" asp-route-id="@item.Id">Modifier</a>
                             <a class="btn btn-warning" type="submit" asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
                           
@@ -105,3 +111,37 @@
         </table>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var checkboxes = document.querySelectorAll('.mark-as-read-checkbox');
+
+        checkboxes.forEach(function (checkbox) {
+            checkbox.addEventListener('change', function () {
+                var messageId = this.dataset.messageId;
+
+                // Appeler une action pour marquer le message comme lu
+                markMessageAsRead([messageId]);
+            });
+        });
+
+        function markMessageAsRead(messageIds) {
+            // Vous pouvez utiliser Ajax pour appeler une action dans votre contrôleur
+            // Exemple avec jQuery :
+            $.ajax({
+                type: 'POST',
+                url: '/Message/MarkAsRead', // Assurez-vous que le nom du contrôleur est correct
+                data: { messageIds: messageIds },
+                traditional: true, // Utilisez cela si vous utilisez une ancienne version de jQuery
+                success: function () {
+                    // Mettez à jour votre interface utilisateur ici si nécessaire
+                    alert('Message marqué comme lu avec succès');
+                },
+                error: function () {
+                    alert('Une erreur s\'est produite lors de la mise à jour du message');
+                }
+            });
+        }
+    });
+</script>
+
+

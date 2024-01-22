@@ -51,6 +51,7 @@ namespace ForumsPorject.Repository.Entites
         [InverseProperty(nameof(AppRole.Utilisateurs))]
         public virtual ICollection<AppRole> AppRoles { get; set; }
         public virtual ICollection<UtilisateurRole> UtilisateurRoles { get; set; }
+         public virtual ICollection<MessageReadState> MessageReadStates { get; set; } = new List<MessageReadState>();
 
     }
 }

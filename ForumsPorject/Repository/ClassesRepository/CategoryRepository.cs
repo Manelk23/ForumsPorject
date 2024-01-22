@@ -21,7 +21,6 @@ namespace ForumsPorject.Repository.ClassesRepository
             _context = context;
         }
 
-
         public async Task<Category> GetByIdAsync(int id)
         {
             var category = await _context.Set<Category>().FindAsync(id);
@@ -35,10 +34,15 @@ namespace ForumsPorject.Repository.ClassesRepository
 
             return category;
         }
+
+
+
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _context.Set<Category>().ToListAsync();
         }
+
+        
 
         public IQueryable<Category> Find(Expression<Func<Category, bool>> predicate)
         {
@@ -50,32 +54,15 @@ namespace ForumsPorject.Repository.ClassesRepository
             await _context.Set<Category>().AddAsync(entity);
         }
 
-        public async Task AddRangeAsync(IEnumerable<Category> entities)
-        {
-            await _context.Set<Category>().AddRangeAsync(entities);
-        }
 
         public void Update(Category entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
         }
 
-        public void UpdateRange(IEnumerable<Category> entities)
-        {
-            foreach (var entity in entities)
-            {
-                _context.Entry(entity).State = EntityState.Modified;
-            }
-        }
-
         public void Remove(Category entity)
         {
             _context.Set<Category>().Remove(entity);
-        }
-
-        public void RemoveRange(IEnumerable<Category> entities)
-        {
-            _context.Set<Category>().RemoveRange(entities);
         }
 
         public async Task UpdateAsync(Category entity)

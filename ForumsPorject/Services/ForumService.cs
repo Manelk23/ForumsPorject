@@ -51,7 +51,7 @@ namespace ForumsPorject.Services
         }
         public async Task<Forum> GetForumByIdAsync(int id)
         {
-           var forum= await _forumRepository.GetByIdAsync(id);
+            var forum = await _forumRepository.GetByIdAsync(id);
             return forum;
 
         }
@@ -78,7 +78,6 @@ namespace ForumsPorject.Services
 
             return false; // forum non trouvé ou utilisateur non autorié
         }
-
         public async Task RemoveForum(int Id, string Contenu, DateTime date, string discrip)
         {
             // Récupérer le message à mettre à jour
@@ -88,6 +87,7 @@ namespace ForumsPorject.Services
                    .Group(forum.ForumId.ToString())
                    .SendAsync("NewForum", forum);
         }
+
 
     }
 }

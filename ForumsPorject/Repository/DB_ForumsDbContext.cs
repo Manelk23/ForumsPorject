@@ -25,6 +25,7 @@ namespace ForumsPorject.Repository
         public virtual DbSet<Theme> Themes { get; set; } = null!;
         public virtual DbSet<Utilisateur> Utilisateurs { get; set; } = null!;
         public virtual DbSet<UtilisateurRole> UtilisateurRoles { get; set; }
+        public virtual DbSet<MessageReadState> MessageReadStates { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -43,8 +44,22 @@ namespace ForumsPorject.Repository
                     .HasName("categorie_pk");
             });
 
+            modelBuilder.Entity<MessageReadState>(entity =>
+            {
+                entity.HasKey(e => e.MessageReadStateId)
+                    .HasName("message_read_state_pk");
 
-            
+                entity.HasOne(e => e.Utilisateur)
+                    .WithMany(u => u.MessageReadStates)
+                    .HasForeignKey(e => e.UtilisateurId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(e => e.Message)
+                    .WithMany(m => m.MessageReadStates)
+                    .HasForeignKey(e => e.MessageId)
+                     .OnDelete(DeleteBehavior.NoAction);
+            });
+
 
             modelBuilder.Entity<Discussion>(entity =>
             {
@@ -52,12 +67,12 @@ namespace ForumsPorject.Repository
                     .WithMany(p => p.Discussions)
                     .HasForeignKey(d => d.Themeid)
                     .HasConstraintName("FK_discussions_themes")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(d => d.Utilisateur)
                     .WithMany(p => p.Discussions)
                     .HasForeignKey(d => d.Utilisateurid)
                     .HasConstraintName("FK_discussions_utilisateurs")
-                     .OnDelete(DeleteBehavior.Cascade);
+                      .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Forum>(entity =>
@@ -66,7 +81,7 @@ namespace ForumsPorject.Repository
                     .WithMany(p => p.Forums)
                     .HasForeignKey(d => d.Categorieid)
                     .HasConstraintName("forum_categorie_id_fk")
-                    .OnDelete(DeleteBehavior.Cascade);
+                     .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Message>(entity =>
@@ -78,13 +93,17 @@ namespace ForumsPorject.Repository
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.AuteurId)
                     .HasConstraintName("message_auteur_id_fk")
-                 .OnDelete(DeleteBehavior.Cascade);
+                  .OnDelete(DeleteBehavior.NoAction);
                 entity.HasOne(d => d.Discussion)
                     .WithMany(p => p.Messages)
                     .HasForeignKey(d => d.Discussionid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("message_discussion_id_fk")
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
+                entity.HasMany(m => m.MessageReadStates)
+                  .WithOne(mrs => mrs.Message)
+                  .HasForeignKey(mrs => mrs.MessageId)
+                   .OnDelete(DeleteBehavior.NoAction);
             });
 
             modelBuilder.Entity<Theme>(entity =>
@@ -97,7 +116,7 @@ namespace ForumsPorject.Repository
                 entity.HasMany(t => t.Discussions)
                     .WithOne(d => d.Theme)
                     .HasForeignKey(d => d.Themeid)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
             });
 
 
@@ -111,7 +130,11 @@ namespace ForumsPorject.Repository
                    .WithOne(ur => ur.Utilisateur)
                    .HasForeignKey(ur => ur.UtilisateurID)
                    .IsRequired()
-                    .OnDelete(DeleteBehavior.Cascade);
+                     .OnDelete(DeleteBehavior.NoAction);
+                entity.HasMany(u => u.MessageReadStates)
+                  .WithOne(mrs => mrs.Utilisateur)
+                  .HasForeignKey(mrs => mrs.UtilisateurId)
+                   .OnDelete(DeleteBehavior.NoAction);
             });
             modelBuilder.Entity<UtilisateurRole>(entity =>
             {

@@ -49,32 +49,17 @@ namespace ForumsPorject.Repository.ClassesRepository
             await _context.SaveChangesAsync();
         }
 
-        public async Task AddRangeAsync(IEnumerable<Theme> entities)
-        {
-            await _context.Set<Theme>().AddRangeAsync(entities);
-        }
 
         public void Update(Theme entity)
         {
             _context.Entry(entity).State = EntityState.Modified;
         }
 
-        public void UpdateRange(IEnumerable<Theme> entities)
-        {
-            foreach (var entity in entities)
-            {
-                _context.Entry(entity).State = EntityState.Modified;
-            }
-        }
+       
 
         public void Remove(Theme entity)
         {
             _context.Set<Theme>().Remove(entity);
-        }
-
-        public void RemoveRange(IEnumerable<Theme> entities)
-        {
-            _context.Set<Theme>().RemoveRange(entities);
         }
 
         public async Task UpdateAsync(Theme entity)
